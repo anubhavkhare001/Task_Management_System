@@ -6,7 +6,7 @@ import { getTaskById, updateTask, Task } from '../services/taskService';
 const EditTask = () => {
   const { taskId } = useParams<{ taskId: string }>();
   const navigate = useNavigate();
-  
+
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,14 +18,13 @@ const EditTask = () => {
     status: 'PENDING',
     remarks: ''
   });
-  
+
   useEffect(() => {
     const fetchTask = async () => {
       if (!taskId) return;
-      
+
       try {
         const taskData = await getTaskById(parseInt(taskId, 10));
-        // Format date for the input field (YYYY-MM-DD)
         if (taskData.dueDate) {
           const dateObj = new Date(taskData.dueDate);
           const formattedDate = dateObj.toISOString().split('T')[0];
@@ -39,27 +38,34 @@ const EditTask = () => {
         setFetchLoading(false);
       }
     };
-    
+
     fetchTask();
   }, [taskId]);
-  
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
   };
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!taskId) return;
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
-      await updateTask(parseInt(taskId, 10), formData);
+      const updatedData = {
+        ...formData,
+        dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
+      };
+
+      await updateTask(parseInt(taskId, 10), updatedData);
       navigate(`/tasks/${taskId}`);
     } catch (err) {
       console.error('Error updating task:', err);
@@ -68,7 +74,7 @@ const EditTask = () => {
       setLoading(false);
     }
   };
-  
+
   if (fetchLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -76,7 +82,7 @@ const EditTask = () => {
       </div>
     );
   }
-  
+
   if (!formData.id) {
     return (
       <div className="bg-red-100 text-red-700 p-4 rounded-md">
@@ -90,7 +96,7 @@ const EditTask = () => {
       </div>
     );
   }
-  
+
   return (
     <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
       <div className="mb-6">
@@ -99,15 +105,15 @@ const EditTask = () => {
           Back to Task
         </Link>
       </div>
-      
+
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Edit Task</h1>
-      
+
       {error && (
         <div className="mb-6 bg-red-100 text-red-700 p-4 rounded-md">
           {error}
         </div>
       )}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="space-y-4 mb-6">
           <div>
@@ -124,7 +130,7 @@ const EditTask = () => {
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          
+
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
               Description
@@ -138,7 +144,7 @@ const EditTask = () => {
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          
+
           <div>
             <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 mb-1">
               Due Date
@@ -152,7 +158,7 @@ const EditTask = () => {
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          
+
           <div>
             <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
               Status
@@ -170,7 +176,7 @@ const EditTask = () => {
               <option value="CANCELLED">Cancelled</option>
             </select>
           </div>
-          
+
           <div>
             <label htmlFor="remarks" className="block text-sm font-medium text-gray-700 mb-1">
               Remarks
@@ -185,9 +191,9 @@ const EditTask = () => {
             />
           </div>
         </div>
-        
+
         <div className="flex justify-end">
-          <Link 
+          <Link
             to={`/tasks/${taskId}`}
             className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md mr-2 hover:bg-gray-300 transition-colors"
           >
