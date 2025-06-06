@@ -61,13 +61,6 @@ A full-stack task management application built with **React (Vite + TypeScript +
 - `created_by_id`: Foreign key referencing `users(id)`
 - `last_updated_by_id`: Foreign key referencing `users(id)`
 
-## Features
-
-- User registration and login
-- JWT-based authentication
-- Create, update, delete tasks
-- Track who created and last updated each task
-
 ## How to Use
 
 1. Clone the repository
