@@ -61,13 +61,6 @@ A full-stack task management application built with **React (Vite + TypeScript +
 - `created_by_id`: Foreign key referencing `users(id)`
 - `last_updated_by_id`: Foreign key referencing `users(id)`
 
-## Features
-
-- User registration and login
-- JWT-based authentication
-- Create, update, delete tasks
-- Track who created and last updated each task
-
 ## How to Use
 
 1. Clone the repository
@@ -212,11 +205,5 @@ axios.defaults.baseURL = "http://localhost:8080/api";
 | Edit Task               | Modify task and save                    | Changes reflected                         |
 | Search Task             | Enter keyword                           | Matching tasks filtered in list           |
 | Delete Task             | Click delete on a task                  | Task removed from list                    |
-
----
-
-## Notes
-
-- You can include screenshots, sample test users, or a demo link (e.g., via ngrok or localtunnel) for reviewers.
 
 ---
