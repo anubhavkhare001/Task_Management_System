@@ -207,9 +207,3 @@ axios.defaults.baseURL = "http://localhost:8080/api";
 | Delete Task             | Click delete on a task                  | Task removed from list                    |
 
 ---
-
-## Notes
-
-- You can include screenshots, sample test users, or a demo link (e.g., via ngrok or localtunnel) for reviewers.
-
----
