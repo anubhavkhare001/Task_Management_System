@@ -138,7 +138,9 @@ task-management-system/
 │       │   ├── Navbar.tsx
 │       │   ├── TaskCard.tsx
 │       │   └── TaskList.tsx
-│       ├── pages/
+│       |── components/
+│       │   ├── AuthContext.tsx
+|       ├── pages/
 │       │   ├── Dashboard.tsx
 │       │   ├── CreateTask.tsx
 │       │   ├── EditTask.tsx
