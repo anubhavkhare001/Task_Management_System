@@ -35,28 +35,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Restore auth state on mount
   useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
+  const checkAuthStatus = () => {
+    const storedUser = localStorage.getItem('user');
     const username = localStorage.getItem('username');
     const password = localStorage.getItem('password');
-    
-    if (username && password) {
+
+    if (storedUser && username && password) {
+      setUser(JSON.parse(storedUser));
+      setIsAuthenticated(true);
+
+      // Set axios auth headers for future requests
       axios.defaults.auth = {
         username,
         password,
       };
     } else {
-      delete axios.defaults.auth;
-    }
-  }, []);
-
-  const checkAuthStatus = () => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      setIsAuthenticated(true);
-    } else {
       setUser(null);
       setIsAuthenticated(false);
+      delete axios.defaults.auth;
     }
   };
 
@@ -66,15 +67,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const response = await axios.post('/api/auth/login', { username, password });
-      
+
       if (response.data && response.data.user) {
         const userData = response.data.user;
         setUser(userData);
         setIsAuthenticated(true);
-        
+
         localStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('username', username);
         localStorage.setItem('password', password);
+
+        // Set axios auth headers dynamically on login
+        axios.defaults.auth = {
+          username,
+          password,
+        };
       }
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
@@ -98,7 +105,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         email,
         password,
       });
-      
+
       if (response.data && response.data.username) {
         return;
       }
@@ -121,6 +128,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem('user');
     localStorage.removeItem('username');
     localStorage.removeItem('password');
+
+    // Clear axios auth on logout
     delete axios.defaults.auth;
   };
 
@@ -134,7 +143,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         logout,
         error,
         loading,
-        checkAuthStatus
+        checkAuthStatus,
       }}
     >
       {children}

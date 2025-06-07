@@ -36,7 +36,7 @@ const Dashboard = () => {
   
   useEffect(() => {
     fetchTasks();
-  }, [statusFilter]); // Re-fetch when status filter changes
+  }, [statusFilter]);
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
