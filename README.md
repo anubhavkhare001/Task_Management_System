@@ -139,7 +139,7 @@ task-management-system/
 │       │   ├── TaskCard.tsx
 │       │   └── TaskList.tsx
 │       |── components/
-│       │   ├── AuthContext.tsx
+│       │   └── AuthContext.tsx
 |       ├── pages/
 │       │   ├── Dashboard.tsx
 │       │   ├── CreateTask.tsx
